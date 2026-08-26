@@ -1,0 +1,27 @@
+generated: '2026-08-25'
+method: searched
+source: >-
+  Registry and site searches on 2026-08-25 — npm, PyPI, RubyGems, crates.io, NuGet, Maven Central,
+  pkg.go.dev, Packagist — plus a full read of https://leafforlife.com and its 8 published pages.
+package_count: 0
+official_count: 0
+note: >-
+  LEAF4Life publishes no client libraries, no SDKs and no CLI. This is expected rather than a gap: the
+  company is a clinical-stage biopharmaceutical developer with no developer program and no product
+  API, and the only API surface in this repo is the WordPress REST content API of its own marketing
+  site — a surface that is consumed with an HTTP client, not a vendor SDK. No `SDKs` and no `Packages`
+  pointer is emitted in apis.yml, because either would credit the company with a distribution it does
+  not maintain. Generic third-party WordPress REST clients exist on npm and PyPI, but none is
+  first-party to LEAF4Life and none is listed here.
+  There is a GitHub account at github.com/leaf4life; it is an unrelated individual (created 2022,
+  one public repository, "football-finall-debug", last touched 2023) and is explicitly NOT wired as
+  this company's GitHubOrganization.
+packages: []
+x-evidence:
+  probed: '2026-08-25'
+  github_namesake:
+    url: https://api.github.com/users/leaf4life
+    status: 200
+    type: User
+    public_repos: 1
+    verdict: not-the-company

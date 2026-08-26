@@ -1,0 +1,36 @@
+generated: '2026-08-25'
+method: generated
+source: openapi/ documents in this repo, all derived from https://leafforlife.com/wp-json/
+note: >-
+  Packaged Agent Skills for the only public API surface LEAF4Life exposes — the WordPress REST content
+  API behind leafforlife.com. Every operationId referenced below exists verbatim in the openapi/
+  document named on the skill, which is itself derived from the provider's live route index and
+  verified against anonymous responses on 2026-08-25. LEAF4Life publishes no AGENTS.md, no skills/
+  directory and no agent documentation of its own; these are API Evangelist generations. There is no
+  write flow to package — every write route on the surface requires an authenticated WordPress user of
+  the site itself — and there is no search flow worth packaging, because site search returns zero for
+  every term on this deployment.
+skills:
+- file: leaf4life-index-the-public-site.md
+  name: Index the LEAF4Life public site
+  description: >-
+    Enumerate all 8 published pages, sync incrementally with modified_after, and design around the
+    central limitation of this surface — page bodies are empty over the API, so REST gives you the
+    index and HTTP gives you the content.
+  api: openapi/leaf4life-pages-api-openapi.yml
+  operations: [listPages, getPage, listTypes]
+- file: leaf4life-harvest-media-library.md
+  name: Harvest the LEAF4Life media library
+  description: >-
+    Page through the 59 image attachments, choose the right rendition from media_details.sizes, and
+    attribute each asset to the page it was uploaded to. The freshest activity signal on this site.
+  api: openapi/leaf4life-media-api-openapi.yml
+  operations: [listMedia, getMediaItem, listPages]
+- file: leaf4life-describe-the-deployment.md
+  name: Describe the LEAF4Life API deployment before calling it
+  description: >-
+    Read the route index, types, taxonomies and statuses to learn the shape of the surface, and
+    establish which routes are open, which return 401 — including the wp-abilities agent registry —
+    and which discovery documents simply do not exist.
+  api: openapi/leaf4life-discovery-api-openapi.yml
+  operations: [listTypes, listTaxonomies, listStatuses, getOEmbed]

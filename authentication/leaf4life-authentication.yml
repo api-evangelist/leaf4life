@@ -1,0 +1,102 @@
+generated: '2026-08-25'
+method: derived
+source: >-
+  Live WordPress REST route index at https://leafforlife.com/wp-json/ plus anonymous probes of every
+  namespace on 2026-08-25, cross-checked against the OpenAPI documents in openapi/.
+summary:
+  types: []
+  api_key_in: []
+  oauth2_flows: []
+  public_read: true
+note: >-
+  The LEAF4Life content API declares no security schemes and requires no credentials for any operation
+  catalogued in this repo. LEAF4Life runs no developer program and publishes no authentication
+  documentation, because there is no product API to authenticate against — the read surface is simply
+  open. The one authentication mechanism the deployment advertises for discovery is WordPress
+  application passwords (HTTP Basic over TLS), announced in the `authentication` block of the route
+  index and pointing at the wp-admin authorization screen. That mechanism exists for the site's own
+  editors; it is not an API credential a third party can obtain, and no attempt was made to use it.
+schemes:
+- id: applicationPassword
+  type: http
+  scheme: basic
+  in: header
+  header: Authorization
+  provider_advertised: true
+  obtainable_by_third_party: false
+  authorization_endpoint: https://leafforlife.com/wp-admin/authorize-application.php
+  detail: >-
+    Declared verbatim by the route index as
+    authentication.application-passwords.endpoints.authorization. WordPress application passwords are
+    per-user credentials issued from the site's own admin screen to an already-authenticated editor.
+    There is no self-service registration, no client-credentials grant, no key issuance and no
+    developer signup, so this cannot be treated as a public API authentication scheme. It is recorded
+    because it is what the provider actually publishes.
+anonymous_access:
+  readable:
+  - GET /
+  - GET /wp/v2
+  - GET /wp/v2/pages
+  - GET /wp/v2/pages/{id}
+  - GET /wp/v2/media
+  - GET /wp/v2/media/{id}
+  - GET /wp/v2/categories
+  - GET /wp/v2/categories/{id}
+  - GET /wp/v2/tags
+  - GET /wp/v2/tags/{id}
+  - GET /wp/v2/posts
+  - GET /wp/v2/comments
+  - GET /wp/v2/blocks
+  - GET /wp/v2/navigation
+  - GET /wp/v2/search
+  - GET /wp/v2/types
+  - GET /wp/v2/taxonomies
+  - GET /wp/v2/statuses
+  - GET /wp/v2/users
+  - GET /oembed/1.0/embed
+  gated:
+  - path: /wp/v2/settings
+    status: 401
+    code: rest_forbidden
+  - path: /wp/v2/block-types
+    status: 401
+    code: rest_block_type_cannot_view
+  - path: /wp/v2/menu-items
+    status: 401
+    code: rest_cannot_view
+  - path: /wp/v2/template-parts
+    status: 401
+    code: rest_cannot_manage_templates
+  - path: /wp/v2/pages?context=edit
+    status: 401
+    code: rest_forbidden_context
+    note: The `edit` context is closed anonymously; `view` and `embed` return data.
+  - path: /wp-abilities/v1/abilities
+    status: 401
+    code: rest_forbidden
+    note: >-
+      The WordPress Abilities API namespace is registered on this deployment (WordPress 7.0.3) but
+      closed to anonymous callers. It is the nearest thing to an agent-callable tool registry here,
+      and it is not reachable without credentials, so no tool schemas could be read.
+  - path: /wp-abilities/v1/categories
+    status: 401
+    code: rest_forbidden
+  - path: /wp-site-health/v1/tests/background-updates
+    status: 401
+    code: rest_forbidden
+  - path: /akismet/v1/key
+    status: 401
+    code: rest_forbidden
+  - path: /wp-super-cache/v1/settings
+    status: 401
+    code: rest_forbidden
+  write_operations: >-
+    Every POST/PUT/PATCH/DELETE route in the 150-route index requires an authenticated WordPress user.
+    None were exercised — this pipeline reads only.
+x-evidence:
+  probed: '2026-08-25'
+  index: https://leafforlife.com/wp-json/
+  index_authentication_field:
+    application-passwords:
+      endpoints:
+        authorization: https://leafforlife.com/wp-admin/authorize-application.php

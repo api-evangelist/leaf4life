@@ -1,0 +1,113 @@
+generated: '2026-08-25'
+method: derived
+source: >-
+  openapi/ documents in this repo + live probes of https://leafforlife.com on 2026-08-25.
+note: >-
+  Cross-cutting standards conformance for the only public API surface LEAF4Life exposes. LEAF4Life
+  makes no published compliance claims of any kind — no trust center, no SOC 2 / ISO 27001 / HIPAA /
+  GxP statement, no certifications page, no privacy policy and no terms of service — so no
+  `Compliance` pointer is emitted in apis.yml. Every entry below is derived from the deployed contract,
+  not from a provider assertion.
+standards:
+- id: openapi-3.1
+  conforms: true
+  published_by_provider: false
+  evidence: >-
+    The eight documents in openapi/ are API Evangelist derivations of the live WordPress route index.
+    LEAF4Life itself publishes no OpenAPI — /openapi.json, /openapi.yaml, /swagger.json, /api-docs,
+    /docs and /v1/openapi.json all fall through to the themed HTML 404 page.
+- id: wordpress-rest-api-v2
+  conforms: true
+  published_by_provider: true
+  evidence: >-
+    GET https://leafforlife.com/wp-json/ returns the canonical WordPress REST index — name,
+    description, url, home, gmt_offset, namespaces, 150 routes and an authentication block — with
+    namespace wp/v2 registered. The deployment is stock WordPress 7.0.3 plus four plugins.
+- id: oembed-1.0
+  conforms: true
+  published_by_provider: true
+  evidence: >-
+    GET /wp-json/oembed/1.0/embed?url=https%3A%2F%2Fleafforlife.com%2F returned HTTP 200 with
+    version "1.0", provider_name "LEAF4life", provider_url https://leafforlife.com. This is the one
+    formally standardised interface the deployment implements, and it is implemented by WordPress core
+    rather than by a LEAF4Life engineering decision.
+- id: rfc8288-web-linking
+  conforms: true
+  published_by_provider: true
+  evidence: >-
+    Collection responses carry a Link header with rel="next"/rel="prev", observed verbatim on
+    /wp/v2/pages?per_page=1.
+- id: rfc9457-problem-details
+  conforms: false
+  evidence: >-
+    Errors use the WordPress envelope {code, message, data:{status}} served as application/json. There
+    is no `type` URI, no title/detail split and no application/problem+json media type. See
+    errors/leaf4life-problem-types.yml.
+- id: pagination
+  conforms: true
+  evidence: >-
+    Page-number pagination with page/per_page/offset, X-WP-Total and X-WP-TotalPages response headers,
+    and the counts exposed cross-origin via Access-Control-Expose-Headers. per_page > 100 is rejected
+    with 400 rest_invalid_param rather than silently clamped.
+- id: idempotency
+  conforms: false
+  evidence: >-
+    No Idempotency-Key header and no request-deduplication contract. There is no anonymous write
+    surface at all, so the question does not arise in practice — recorded false rather than n/a
+    because the check reads a header that is absent.
+- id: oauth2
+  conforms: false
+  evidence: >-
+    No OAuth 2.0 anywhere. /.well-known/oauth-authorization-server and
+    /.well-known/oauth-protected-resource both return the themed HTML 404 page. The only advertised
+    mechanism is WordPress application passwords (HTTP Basic), issued from wp-admin to the site's own
+    editors and not obtainable by a third party.
+- id: oidc
+  conforms: false
+  evidence: '/.well-known/openid-configuration returns HTTP 404 (themed HTML body).'
+- id: mcp
+  conforms: false
+  evidence: >-
+    No MCP server. /mcp returns HTTP 404. The wp-abilities/v1 namespace — WordPress core's ability
+    registry, the closest thing on this deployment to an agent-callable tool surface — is registered
+    but returns 401 rest_forbidden to anonymous callers, so no tool schemas are publicly readable.
+- id: a2a
+  conforms: false
+  evidence: >-
+    No A2A agent card. Both /.well-known/agent-card.json and the legacy /.well-known/agent.json return
+    HTTP 404 with the themed HTML body, so no card was saved and no AgentCard pointer is emitted.
+- id: security-txt
+  conforms: false
+  evidence: '/.well-known/security.txt returns HTTP 404. See well-known/leaf4life-well-known.yml.'
+- id: api-catalog-rfc9727
+  conforms: false
+  evidence: '/.well-known/api-catalog returns HTTP 404.'
+- id: llms-txt
+  conforms: false
+  evidence: >-
+    /llms.txt returns HTTP 404. The llms/leaf4life-llms.txt in this repo is an API Evangelist
+    generation from the catalog, not a provider publication.
+domain_standard:
+  sector: biopharmaceutical / clinical-stage drug development
+  regime_reference: >-
+    The regulatory regime a clinical-stage biopharma would be measured against (HL7 FHIR for clinical
+    data exchange, CDISC SDTM/ADaM for trial submission datasets, HL7 v2, IDMP for product
+    identification, SPL for labelling, ICH E6 GCP for trial conduct) is entirely absent from this
+    surface — and correctly so.
+  declared: false
+  evidence: >-
+    Not a defect and not scored against the company. LEAF4Life ships no clinical-data, trial-data or
+    product-identification interface of any kind; the only API here is the content API of its
+    corporate marketing site. There is no contract location in which a domain standard could be
+    declared, so no domain-standard conformance is asserted. This is a reward-only dimension and an
+    absent market standard is not a penalty.
+compliance_claims:
+  published: false
+  trust_center: null
+  certifications: []
+  detail: >-
+    No certifications, attestations or compliance program is published on the public site. The
+    company does state a regulatory fact — Compassionate Use Authorization granted in France for
+    KizaVie™ in ARDS, and three Phase 3 registrational studies running in Europe — but that is a drug
+    regulatory status, not an information-security or data-handling compliance claim, and it is not
+    wired as `Compliance`.

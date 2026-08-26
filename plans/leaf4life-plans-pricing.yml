@@ -1,0 +1,32 @@
+generated: '2026-08-25'
+method: searched
+source: https://leafforlife.com/
+plan_count: 0
+note: >-
+  LEAF4Life publishes no plans, no pricing page and no commercial API offer of any kind. It is a
+  privately held clinical-stage biopharmaceutical company whose product is an investigational drug
+  (KizaVie™ / LEAF-4L6715) in Phase 3 registrational studies, not software. The entire public site is
+  eight pages — Home, Our Science, Leadership, Advisory Board, Contact Us and three leadership
+  biographies — and none of them mentions pricing, plans, tiers, a free trial or a developer signup.
+  The API surface catalogued in this repo is the site's own WordPress REST content API, which is free
+  to read and has no commercial packaging behind it. This is a genuine zero, recorded rather than
+  omitted so that "no plans published" is distinguishable from "not checked".
+plans: []
+enterprise_only: false
+contact_sales_url: https://leafforlife.com/contact-us/
+x-evidence:
+  probed: '2026-08-25'
+  pages_read:
+  - url: https://leafforlife.com/
+    status: 200
+  - url: https://leafforlife.com/our-science/
+    status: 200
+  - url: https://leafforlife.com/management-team/
+    status: 200
+  - url: https://leafforlife.com/advisory-board/
+    status: 200
+  - url: https://leafforlife.com/contact-us/
+    status: 200
+  page_inventory_source: >-
+    GET https://leafforlife.com/wp-json/wp/v2/pages?per_page=100 → X-WP-Total: 8. The page collection
+    is the whole site, so the absence of a pricing page is a complete enumeration, not a sampling.

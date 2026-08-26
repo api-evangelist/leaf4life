@@ -1,0 +1,132 @@
+generated: '2026-08-25'
+method: derived
+source: >-
+  openapi/ documents in this repo + live anonymous responses from https://leafforlife.com/wp-json on
+  2026-08-25.
+note: >-
+  The entity-relationship graph of the LEAF4Life content API, derived from the WordPress REST object
+  shapes as they are actually returned by this deployment. LEAF4Life publishes no object reference —
+  it runs no developer program — so nothing here comes from a provider document. Identifiers are bare
+  auto-increment integers; there are no prefixed ids, no UUIDs and no domain-scoped keys.
+identifiers:
+  scheme: integer
+  detail: >-
+    Every object is keyed by a WordPress auto-increment integer that is unique across all post types
+    (pages and media share one sequence). Terms have their own sequence. There is no prefix, checksum
+    or type discriminator in the id, so an id alone does not tell a consumer what it points at — the
+    `type`/`subtype` fields on search results are the only cheap discriminator.
+  observed_ranges:
+    pages: 137, 881, 1236, 2479, 2509, 2540, 2603, 3182
+    media: up to 3544
+    terms: 1 (category), 8..28 (tags)
+    users: 1
+entities:
+- name: page
+  rest_base: /wp/v2/pages
+  count_observed: 8
+  key_fields: [id, slug, title.rendered, link, date, modified, parent, menu_order, template, status]
+  empty_fields: [content.rendered, excerpt.rendered]
+  detail: >-
+    The whole public website. content.rendered and excerpt.rendered are the empty string on every one
+    of the 8 pages because the theme template `template-modular.php` assembles bodies from
+    page-builder postmeta rather than post_content. All 8 pages have parent 0 — the hierarchy is flat
+    despite three of them being biography pages conceptually subordinate to the leadership page.
+- name: attachment
+  rest_base: /wp/v2/media
+  count_observed: 59
+  key_fields: [id, slug, title.rendered, source_url, mime_type, media_type, media_details, post, date]
+  detail: >-
+    43 image/png and 16 image/jpeg, uploaded between 2020-09-22 and 2026-07-05. media_details.sizes
+    carries the generated renditions. The `post` field is the attachment-to-parent link.
+- name: category
+  rest_base: /wp/v2/categories
+  count_observed: 1
+  key_fields: [id, name, slug, count, parent, taxonomy]
+  detail: The WordPress default `uncategorized` term, count 0.
+- name: tag
+  rest_base: /wp/v2/tags
+  count_observed: 21
+  key_fields: [id, name, slug, count, taxonomy]
+  detail: >-
+    21 terms, every one with count 0, and the slugs (animation, beard, camera, sandwich, watch,
+    themes, time…) are theme-demo residue. Recorded because it is what the route returns; it carries
+    no company semantics and should not be mined as a vocabulary.
+- name: post
+  rest_base: /wp/v2/posts
+  count_observed: 0
+  key_fields: [id, slug, title.rendered, content.rendered, date, author, categories, tags]
+  detail: Registered and reachable, zero items. No news, press-release or blog archive exists.
+- name: comment
+  rest_base: /wp/v2/comments
+  count_observed: 0
+  key_fields: [id, post, author_name, content.rendered, date, status]
+  detail: Registered and reachable, zero items.
+- name: user
+  rest_base: /wp/v2/users
+  count_observed: 1
+  key_fields: [id, name, slug, link, description, avatar_urls]
+  detail: >-
+    One shared editorial account, `leaf4l` (id 1). No real names, e-mail addresses or roles are
+    exposed anonymously. Note that the people who matter for this company — Clet Niyikiza, Hans
+    Kastensmith, Victor Moyo, Xavier Pivot and the advisory board — appear only in page HTML, never as
+    API objects.
+- name: type
+  rest_base: /wp/v2/types
+  count_observed: 11
+  detail: >-
+    post, page, attachment, nav_menu_item, wp_block, wp_template, wp_template_part, wp_global_styles,
+    wp_navigation, wp_font_family, wp_font_face. Only page and attachment carry published content.
+- name: taxonomy
+  rest_base: /wp/v2/taxonomies
+  count_observed: 4
+  detail: category, post_tag, nav_menu, wp_pattern_category.
+relationships:
+- from: attachment
+  to: page
+  cardinality: belongs_to
+  via: post
+  detail: An attachment's `post` field carries the id of the page it was uploaded to (0 when unattached).
+- from: page
+  to: attachment
+  cardinality: has_one
+  via: featured_media
+  detail: featured_media holds an attachment id, or 0 when unset.
+- from: page
+  to: page
+  cardinality: belongs_to
+  via: parent
+  detail: Hierarchical parent id. Flat on this deployment — every page has parent 0.
+- from: page
+  to: user
+  cardinality: belongs_to
+  via: author
+  detail: Author id, always 1 on this deployment.
+- from: post
+  to: category
+  cardinality: has_many
+  via: categories
+  detail: Array of term ids. No post exists, so the edge is registered but never populated.
+- from: post
+  to: tag
+  cardinality: has_many
+  via: tags
+  detail: Array of term ids. Never populated.
+- from: comment
+  to: post
+  cardinality: belongs_to
+  via: post
+  detail: Never populated — zero comments.
+- from: page
+  to: type
+  cardinality: belongs_to
+  via: type
+  detail: The registered post-type slug, discoverable through /wp/v2/types.
+embedding:
+  param: _embed
+  detail: >-
+    _embed inlines author, featured media and terms under `_embedded`, collapsing the relationships
+    above into a single request. With one author, no terms in use and few featured images, its value
+    on this deployment is limited.
+render_note: >-
+  No subway/ diagram exists in this repo. The graph is small enough — 8 entities, 8 edges, most of
+  them unpopulated — that the table above is the complete picture.

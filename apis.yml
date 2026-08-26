@@ -1,18 +1,245 @@
 aid: leaf4life
 name: LEAF4Life
-description: 'LEAF4Life is a company surfaced via the API Evangelist harvest backlog (source: secondary-market)
-  and added to the network as a stub for full-pipeline profiling.'
+description: >-
+  LEAF4Life Inc. is a privately held, clinical-stage biopharmaceutical company headquartered in Woburn,
+  Massachusetts, founded in 2018 by Dr. Clet Niyikiza to develop transformative therapies for hypoxia —
+  insufficient oxygen at the tissue and cellular level — which the company describes as implicated in the
+  world's ten leading causes of death and more than 30 million deaths a year. Its lead asset, KizaVie™
+  (LEAF-4L6715), is a proprietary liposomal formulation of transcrocetin, a naturally occurring carotenoid
+  from saffron and cape jasmine, designed to enhance oxygen diffusion in plasma and interstitium, restore
+  microcirculatory oxygen delivery and repair hypoxia-driven microvascular and tissue damage, thereby
+  improving the effectiveness of standard-of-care treatment. KizaVie™ is in three Phase 3 registrational
+  studies in Europe — acute respiratory distress syndrome (ARDS), glioblastoma and sarcoma — and has
+  received Compassionate Use Authorization in France for ARDS. The company also describes application to
+  shock and trauma, cardiovascular disease, neurodegenerative disorders and aging. LEAF4Life runs no
+  developer program and publishes no product API, developer portal, API reference, SDK or OpenAPI
+  definition. The only machine-readable surface reachable without credentials is the WordPress REST
+  content API behind leafforlife.com, catalogued here, and even that returns page identity and media only —
+  every page body is empty over the API because the site is assembled by a page builder.
+image: https://leafforlife.com/wp-content/uploads/2025/11/LEAF4Life_logo_cropped_final.png
 url: https://raw.githubusercontent.com/api-evangelist/leaf4life/refs/heads/main/apis.yml
 x-type: company
 x-source: harvest:secondary-market
-x-tier: stub
-x-tier-reason: harvest
-specificationVersion: '0.20'
+x-tier: profiled
+x-tier-reason: enriched
+specificationVersion: '0.23'
 created: '2026-08-25'
 modified: '2026-08-25'
 tags:
 - Company
-apis: []
+- Biotechnology
+- Pharmaceuticals
+- Clinical Trials
+- Oncology
+- Critical Care
+- Drug Development
+- Life Sciences
+- Rare Disease
+- content-api
+tags_raw:
+- Company
+- biotechnology
+- pharmaceuticals
+- clinical-trials
+- oncology
+- critical-care
+- drug-development
+- life-sciences
+- rare-disease
+- content-api
+apis:
+- aid: leaf4life:leaf4life-pages-api
+  name: LEAF4Life Content Pages API
+  description: >-
+    The page collection behind leafforlife.com — 8 published pages covering the mission, the science,
+    leadership, the advisory board and contact. Anonymously readable. Verified 2026-08-25: content.rendered
+    is empty on every page because the theme assembles bodies with a page builder, so the route yields page
+    identity, links and dates but no page text.
+  humanURL: https://developer.wordpress.org/rest-api/
+  baseURL: https://leafforlife.com/wp-json
+  tags:
+  - Pages
+  - Content
+  tags_raw:
+  - pages
+  - content
+  properties:
+  - type: OpenAPI
+    url: openapi/leaf4life-pages-api-openapi.yml
+  - type: Authentication
+    url: authentication/leaf4life-authentication.yml
+  - type: ErrorCatalog
+    url: errors/leaf4life-problem-types.yml
+  - type: Conventions
+    url: conventions/leaf4life-conventions.yml
+  - type: DataModel
+    url: data-model/leaf4life-data-model.yml
+- aid: leaf4life:leaf4life-media-api
+  name: LEAF4Life Media API
+  description: >-
+    The WordPress media library behind leafforlife.com — 59 image attachments (43 PNG, 16 JPEG) spanning
+    September 2020 to July 2026, including the brand marks, leadership headshots and the figure artwork used
+    on the science pages. Anonymously readable. No PDFs, documents or datasets are published.
+  humanURL: https://developer.wordpress.org/rest-api/
+  baseURL: https://leafforlife.com/wp-json
+  tags:
+  - Media
+  tags_raw:
+  - media
+  properties:
+  - type: OpenAPI
+    url: openapi/leaf4life-media-api-openapi.yml
+  - type: Authentication
+    url: authentication/leaf4life-authentication.yml
+  - type: ErrorCatalog
+    url: errors/leaf4life-problem-types.yml
+  - type: Conventions
+    url: conventions/leaf4life-conventions.yml
+  - type: DataModel
+    url: data-model/leaf4life-data-model.yml
+- aid: leaf4life:leaf4life-taxonomy-api
+  name: LEAF4Life Taxonomy API
+  description: >-
+    Category and tag terms. Registered and anonymously reachable but effectively unused — one category
+    (the WordPress default `uncategorized`) and 21 tags, every one with an item count of zero, and the tag
+    slugs are theme-demo residue rather than company vocabulary.
+  humanURL: https://developer.wordpress.org/rest-api/
+  baseURL: https://leafforlife.com/wp-json
+  tags:
+  - Taxonomy
+  tags_raw:
+  - taxonomy
+  properties:
+  - type: OpenAPI
+    url: openapi/leaf4life-taxonomy-api-openapi.yml
+  - type: Authentication
+    url: authentication/leaf4life-authentication.yml
+  - type: ErrorCatalog
+    url: errors/leaf4life-problem-types.yml
+  - type: Conventions
+    url: conventions/leaf4life-conventions.yml
+  - type: DataModel
+    url: data-model/leaf4life-data-model.yml
+- aid: leaf4life:leaf4life-discovery-api
+  name: LEAF4Life API Discovery
+  description: >-
+    The self-describing routes of the deployment — registered post types, taxonomies and post statuses,
+    plus the route index at the server root that publishes name, description, namespaces, all 150 routes
+    and the application-passwords authentication block.
+  humanURL: https://developer.wordpress.org/rest-api/
+  baseURL: https://leafforlife.com/wp-json
+  tags:
+  - Discovery
+  - Schema
+  tags_raw:
+  - discovery
+  - schema
+  properties:
+  - type: OpenAPI
+    url: openapi/leaf4life-discovery-api-openapi.yml
+  - type: Authentication
+    url: authentication/leaf4life-authentication.yml
+  - type: ErrorCatalog
+    url: errors/leaf4life-problem-types.yml
+  - type: Conventions
+    url: conventions/leaf4life-conventions.yml
+  - type: DataModel
+    url: data-model/leaf4life-data-model.yml
+- aid: leaf4life:leaf4life-search-api
+  name: LEAF4Life Search API
+  description: >-
+    Cross-type site search returning lightweight result stubs. Live and correct, but it returns zero for
+    every site term tried — including with subtype=page — because WordPress indexes post_content and this
+    deployment's page bodies live in page-builder postmeta instead.
+  humanURL: https://developer.wordpress.org/rest-api/
+  baseURL: https://leafforlife.com/wp-json
+  tags:
+  - Search
+  tags_raw:
+  - search
+  properties:
+  - type: OpenAPI
+    url: openapi/leaf4life-search-api-openapi.yml
+  - type: Authentication
+    url: authentication/leaf4life-authentication.yml
+  - type: ErrorCatalog
+    url: errors/leaf4life-problem-types.yml
+  - type: Conventions
+    url: conventions/leaf4life-conventions.yml
+  - type: DataModel
+    url: data-model/leaf4life-data-model.yml
+- aid: leaf4life:leaf4life-users-api
+  name: LEAF4Life Authors API
+  description: >-
+    Published authors. One entry — a shared editorial account, `leaf4l` — exposing only id, name, slug,
+    link, description and avatar URLs anonymously. No personal names, e-mail addresses or roles are
+    disclosed.
+  humanURL: https://developer.wordpress.org/rest-api/
+  baseURL: https://leafforlife.com/wp-json
+  tags:
+  - Users
+  tags_raw:
+  - users
+  properties:
+  - type: OpenAPI
+    url: openapi/leaf4life-users-api-openapi.yml
+  - type: Authentication
+    url: authentication/leaf4life-authentication.yml
+  - type: ErrorCatalog
+    url: errors/leaf4life-problem-types.yml
+  - type: Conventions
+    url: conventions/leaf4life-conventions.yml
+  - type: DataModel
+    url: data-model/leaf4life-data-model.yml
+- aid: leaf4life:leaf4life-posts-api
+  name: LEAF4Life Posts and Comments API
+  description: >-
+    Post and comment collections. Registered and anonymously reachable, both empty — LEAF4Life publishes
+    no news archive, press-release feed or blog through WordPress, so the /feed/ RSS endpoint the theme
+    advertises is also empty. Catalogued because a measured absence against a live route is data.
+  humanURL: https://developer.wordpress.org/rest-api/
+  baseURL: https://leafforlife.com/wp-json
+  tags:
+  - Posts
+  - Comments
+  tags_raw:
+  - posts
+  - comments
+  properties:
+  - type: OpenAPI
+    url: openapi/leaf4life-posts-api-openapi.yml
+  - type: Authentication
+    url: authentication/leaf4life-authentication.yml
+  - type: ErrorCatalog
+    url: errors/leaf4life-problem-types.yml
+  - type: Conventions
+    url: conventions/leaf4life-conventions.yml
+  - type: DataModel
+    url: data-model/leaf4life-data-model.yml
+- aid: leaf4life:leaf4life-oembed-api
+  name: LEAF4Life oEmbed API
+  description: >-
+    oEmbed 1.0 provider endpoint for URLs on leafforlife.com. Verified anonymously against the site root —
+    provider_name "LEAF4life". This is the only formally standardised interface the deployment implements.
+  humanURL: https://oembed.com/
+  baseURL: https://leafforlife.com/wp-json
+  tags:
+  - oEmbed
+  - Embeds
+  tags_raw:
+  - oembed
+  - embeds
+  properties:
+  - type: OpenAPI
+    url: openapi/leaf4life-oembed-api-openapi.yml
+  - type: Authentication
+    url: authentication/leaf4life-authentication.yml
+  - type: ErrorCatalog
+    url: errors/leaf4life-problem-types.yml
+  - type: Conventions
+    url: conventions/leaf4life-conventions.yml
+  - type: Conformance
+    url: conformance/leaf4life-conformance.yml
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
@@ -20,4 +247,45 @@ maintainers:
   email: info@apis.io
 common:
 - type: Website
-  url: https://www.nasdaqprivatemarket.com/
+  url: https://leafforlife.com/
+- type: About
+  url: https://leafforlife.com/our-science/
+- type: Leadership
+  url: https://leafforlife.com/management-team/
+- type: AdvisoryBoard
+  url: https://leafforlife.com/advisory-board/
+- type: Contact
+  url: https://leafforlife.com/contact-us/
+- type: LinkedIn
+  url: https://www.linkedin.com/company/leaf4life-inc
+- type: SecondaryMarket
+  url: https://equityzen.com/company/leaf4life/
+- type: Overlay
+  url: overlays/leaf4life-content-overlay.yaml
+- type: Authentication
+  url: authentication/leaf4life-authentication.yml
+- type: Conventions
+  url: conventions/leaf4life-conventions.yml
+- type: Conformance
+  url: conformance/leaf4life-conformance.yml
+- type: ErrorCatalog
+  url: errors/leaf4life-problem-types.yml
+- type: Lifecycle
+  url: lifecycle/leaf4life-lifecycle.yml
+- type: DataModel
+  url: data-model/leaf4life-data-model.yml
+- type: DomainSecurity
+  url: security/leaf4life-domain-security.yml
+- type: RateLimits
+  url: rate-limits/leaf4life-rate-limits.yml
+- type: Plans
+  url: plans/leaf4life-plans-pricing.yml
+- type: LLMsTxt
+  url: llms/leaf4life-llms.txt
+- type: AgentSkill
+  url: skills/_index.yml
+x-enrichment:
+  date: '2026-08-25'
+  status: enriched
+  artifacts_added: 26
+  pass: local-v1

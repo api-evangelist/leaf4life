@@ -1,0 +1,86 @@
+generated: '2026-08-25'
+method: derived
+source: >-
+  openapi/ documents in this repo + live probes of https://leafforlife.com on 2026-08-25.
+note: >-
+  LEAF4Life runs no developer program, so it publishes no API versioning policy, no deprecation
+  policy, no SLA and no status page. Nothing below is asserted on the company's behalf. No
+  `StatusPage`, `Deprecation` or `ChangeLog` pointer is emitted in apis.yml, because none of those
+  surfaces exist — the operational-transparency checks those pointers feed would be false credit here.
+versioning:
+  scheme: uri-path-namespace
+  current: wp/v2
+  docs: https://developer.wordpress.org/rest-api/
+  provider_policy: null
+  detail: >-
+    The version lives in the route namespace and is set by WordPress core and the installed plugins,
+    not by LEAF4Life. Namespaces observed on 2026-08-25: oembed/1.0, akismet/v1, wp-super-cache/v1,
+    wp/v2, wp-site-health/v1, wp-block-editor/v1, wp-abilities/v1. A core or plugin update can add,
+    change or remove routes at any time with no notice to consumers.
+deprecation:
+  policy_url: null
+  sunset_header: false
+  deprecation_header: false
+  detail: >-
+    No RFC 8594 Sunset header and no Deprecation header observed on any response. No deprecation
+    policy is published. Route churn is inherited from upstream WordPress and plugin releases.
+deprecated_operations: []
+sla:
+  url: null
+  uptime_target: null
+status_page:
+  url: null
+  detail: >-
+    No status page. No status.* hostname and no third-party status page (Statuspage, Instatus,
+    Better Stack) is linked from the site.
+support:
+  url: https://leafforlife.com/contact-us/
+  email: null
+  detail: >-
+    The only published contact channel is a WPForms contact form on /contact-us/. No e-mail address,
+    telephone number or postal address appears anywhere on the public site, and there is no developer
+    support channel, forum, help center or issue tracker. No `Support` pointer is emitted; the
+    corporate contact form is wired as `Contact`.
+changelog:
+  url: null
+  detail: >-
+    No API changelog and no corporate news surface. /wp/v2/posts is registered but empty
+    (X-WP-Total: 0) and the /feed/ RSS endpoint the theme advertises therefore carries no items, so no
+    `ChangeLog` and no `BlogRSS` pointer is emitted — wiring an empty feed would assert a publishing
+    cadence the company does not have.
+observed_freshness:
+  api_index_fetched: '2026-08-25'
+  route_count: 150
+  namespace_count: 7
+  most_recent_post: null
+  most_recent_page_modified: '2026-02-06'
+  most_recent_media: '2026-07-05'
+  oldest_media: '2020-09-22'
+  detail: >-
+    The site is maintained but slow-moving. The most recently modified page is the leadership page
+    (2026-02-06); the most recent media upload is 2026-07-05, seven weeks before this pass. Brand
+    assets were replaced in August and November 2025, and three leadership biography pages have not
+    been touched since October 2020.
+platform:
+  cms: WordPress 7.0.3
+  page_builder: theme template `template-modular.php` (theme directory wp-content/themes/modules)
+  plugins_visible: [wpforms, responsive-lightbox, akismet, wp-super-cache, nitropack]
+  origin: openresty/1.25.3.1
+  hosting: Web.com (X-Webcom-Cache-Status header on every response)
+  cdn: NitroPack edge cache (cdn-ildiemf.nitrocdn.com) in front of a Cloudflare-managed edge (cf-edge-cache)
+  detail: >-
+    A small managed-WordPress deployment. The API surface is whatever WordPress core registers plus
+    four plugins; none of it is a product decision by LEAF4Life.
+discovery_defects:
+  - id: sitemap-404
+    detail: >-
+      robots.txt advertises `Sitemap: https://leafforlife.com/wp-sitemap.xml`, and that URL returns
+      HTTP 404. /sitemap.xml also returns 404. The site therefore publishes a sitemap pointer to a
+      document it does not serve — a one-line fix on the provider's side and the single cheapest
+      discoverability improvement available to them.
+    probed: '2026-08-25'
+    evidence:
+    - url: https://leafforlife.com/robots.txt
+      status: 200
+    - url: https://leafforlife.com/wp-sitemap.xml
+      status: 404

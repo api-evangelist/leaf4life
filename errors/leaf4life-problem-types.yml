@@ -1,0 +1,108 @@
+generated: '2026-08-25'
+method: derived
+source: >-
+  openapi/ documents in this repo + live anonymous error responses observed against
+  https://leafforlife.com/wp-json on 2026-08-25.
+format: wordpress-rest
+rfc9457: false
+note: >-
+  LEAF4Life publishes no error reference — it runs no developer program. This catalogue is derived
+  from the WordPress REST error envelope and from error bodies actually observed on 2026-08-25. The
+  envelope is `{code, message, data:{status, params?, details?}}` served as application/json. It is NOT
+  RFC 9457 problem details: there is no `type` URI, no title/detail split and no
+  application/problem+json media type, so no dereferenceable problem-type URIs exist for this provider
+  and none are invented here. The `code` field is the stable machine-readable discriminator.
+envelope:
+  media_type: application/json
+  fields:
+    code: Machine-readable error code — the stable discriminator.
+    message: Human-readable message, localized to the site language.
+    data.status: The HTTP status code, repeated in the body.
+    data.params: Per-parameter messages. Present only on rest_invalid_param.
+    data.details: Per-parameter structured detail with its own nested code. Present only on rest_invalid_param.
+problems:
+- status: 400
+  code: rest_invalid_param
+  title: Invalid parameter
+  detail: >-
+    One or more query parameters failed validation. The body carries data.params and data.details
+    keyed by parameter name.
+  observed: 'GET /wp/v2/pages?per_page=500 → {"code":"rest_invalid_param","message":"Invalid parameter(s): per_page","data":{"status":400,"params":{"per_page":"per_page must be between 1 (inclusive) and 100 (inclusive)"},"details":{"per_page":{"code":"rest_out_of_bounds",...}}}}'
+  remediation: Clamp per_page to 1..100 and re-send; read data.details[param].code for the specific rule.
+  source_operations:
+  - openapi/leaf4life-pages-api-openapi.yml#listPages
+  - openapi/leaf4life-media-api-openapi.yml#listMedia
+  - openapi/leaf4life-taxonomy-api-openapi.yml#listTags
+  - openapi/leaf4life-search-api-openapi.yml#searchSite
+  - openapi/leaf4life-users-api-openapi.yml#listUsers
+- status: 400
+  code: rest_out_of_bounds
+  title: Parameter out of bounds
+  detail: Nested code inside data.details when a numeric parameter falls outside its allowed range.
+  remediation: Respect the minimum/maximum declared for the parameter in the OpenAPI.
+- status: 401
+  code: rest_forbidden
+  title: Authentication required
+  detail: >-
+    The generic WordPress permission denial. Returned anonymously for /wp/v2/settings and for the
+    whole akismet/v1, wp-super-cache/v1, wp-site-health/v1 and wp-abilities/v1 namespaces.
+  observed: 'GET /wp-json/wp/v2/settings → {"code":"rest_forbidden","message":"Sorry, you are not allowed to do that.","data":{"status":401}}'
+  remediation: >-
+    Not remediable by a public consumer. These routes are administrative and require an authenticated
+    WordPress user of the site; they are excluded from the OpenAPI in this repo.
+- status: 401
+  code: rest_forbidden_context
+  title: Edit context not permitted
+  detail: Requesting context=edit on a content collection anonymously.
+  observed: 'GET /wp/v2/pages?context=edit → {"code":"rest_forbidden_context","message":"Sorry, you are not allowed to edit posts in this post type.","data":{"status":401}}'
+  remediation: Use context=view (the default) or context=embed.
+- status: 401
+  code: rest_cannot_view
+  title: Cannot view resource
+  detail: Returned anonymously for /wp/v2/menu-items.
+- status: 401
+  code: rest_cannot_manage_templates
+  title: Cannot access templates
+  detail: Returned anonymously for /wp/v2/template-parts.
+- status: 401
+  code: rest_block_type_cannot_view
+  title: Cannot view block types
+  detail: Returned anonymously for /wp/v2/block-types.
+- status: 404
+  code: rest_post_invalid_id
+  title: Invalid post ID
+  detail: No published object exists with the requested numeric identifier.
+  observed: 'GET /wp/v2/pages/999999 → {"code":"rest_post_invalid_id","message":"Invalid post ID.","data":{"status":404}}'
+  remediation: Resolve the identifier through the collection before fetching it directly.
+  source_operations:
+  - openapi/leaf4life-pages-api-openapi.yml#getPage
+  - openapi/leaf4life-media-api-openapi.yml#getMediaItem
+  - openapi/leaf4life-posts-api-openapi.yml#getPost
+- status: 404
+  code: rest_no_route
+  title: No route matched
+  detail: >-
+    The WordPress "no route was found matching the URL and request method" error.
+  observed: 'GET /wp-json/wp/v2/bogus → {"code":"rest_no_route","message":"No route was found matching the URL and request method.","data":{"status":404}}'
+- status: 404
+  code: oembed_invalid_url
+  title: oEmbed URL not on this site
+  detail: The `url` parameter does not resolve to a post or page on leafforlife.com.
+  observed: 'GET /oembed/1.0/embed?url=https://example.com/ → {"code":"oembed_invalid_url","message":"Not Found","data":{"status":404}}'
+  remediation: Pass a URL under https://leafforlife.com/ that resolves to a published page.
+  source_operations:
+  - openapi/leaf4life-oembed-api-openapi.yml#getOEmbed
+edge_errors:
+  note: >-
+    One error class originates outside the WordPress REST router and does not use the envelope.
+    Consumers must handle it.
+  cases:
+  - status: 404
+    origin: WordPress theme (HTML 404 page, served through NitroPack)
+    body: '<!DOCTYPE html><html lang="en-US">… 47,428 bytes'
+    detail: >-
+      Any path that is NOT under /wp-json/ and does not match a page falls through the WordPress
+      rewrite to the themed HTML 404 page — with an HTTP 404 status, but an HTML body. Observed on
+      /openapi.json, /llms.txt, /.well-known/security.txt, /.well-known/agent-card.json, /graphql and
+      /mcp during this pass. The status code is honest; the body is not machine-readable.
+    remediation: Treat any non-JSON body under this host as an absence, regardless of size.

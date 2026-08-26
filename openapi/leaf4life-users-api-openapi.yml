@@ -1,0 +1,266 @@
+openapi: 3.1.0
+info:
+  title: LEAF4Life Authors API
+  version: wp/v2
+  summary: Anonymously readable WordPress author route behind leafforlife.com.
+  description: The read-only content surface LEAF4Life exposes at https://leafforlife.com/wp-json. LEAF4Life Inc. is a privately
+    held clinical-stage biopharmaceutical company in Woburn, Massachusetts developing KizaVie™ (LEAF-4L6715), a proprietary
+    liposomal formulation of transcrocetin for hypoxia-related disorders. It runs no developer program and markets no product
+    API. This document is an API Evangelist derivation of the WordPress REST route index the site publishes at /wp-json/,
+    restricted to operations verified to return data anonymously on 2026-08-25. This document covers the author route. /wp/v2/users/me
+    and the application-password sub-routes require credentials and are excluded.
+  contact:
+    name: LEAF4Life Inc.
+    url: https://leafforlife.com/contact-us/
+  x-api-evangelist-provenance: Derived by the API Evangelist enrichment pipeline from the live WordPress REST route index
+    published at https://leafforlife.com/wp-json/ (150 routes across 7 namespaces) and verified against live anonymous responses
+    on 2026-08-25. Every parameter below appears verbatim in that route index's `args` for the endpoint it is attached to,
+    and every collection count quoted in a description was read from the `X-WP-Total` response header on that date. LEAF4Life
+    publishes no OpenAPI, no developer portal and no API reference for this surface; the humanURL in apis.yml points at the
+    upstream WordPress REST handbook that defines the wp/v2 contract. Routes that returned HTTP 401 anonymously (/wp/v2/settings,
+    /wp/v2/block-types, /wp/v2/menu-items, /wp/v2/template-parts, the whole akismet/v1, wp-super-cache/v1, wp-site-health/v1
+    and wp-abilities/v1 namespaces) and every write method are deliberately excluded. Nothing here was obtained with credentials.
+servers:
+- url: https://leafforlife.com/wp-json
+  description: Production WordPress REST content API
+tags:
+- name: users
+  description: Published authors — a single shared editorial account.
+paths:
+  /wp/v2/users:
+    get:
+      tags:
+      - users
+      operationId: listUsers
+      summary: List published authors
+      description: 'Lists users who have authored published content. One entry on this deployment: the shared editorial account
+        `leaf4l` (id 1). No personal names, e-mail addresses or roles are exposed anonymously.'
+      parameters:
+      - name: capabilities
+        in: query
+        description: Limit result set to users matching at least one specific capability provided. Accepts csv list or single
+          capability.
+        schema:
+          type: array
+          items:
+            type: string
+      - name: context
+        in: query
+        description: Scope under which the request is made; determines fields present in response.
+        schema:
+          type: string
+          enum:
+          - view
+          - embed
+          - edit
+          default: view
+      - name: exclude
+        in: query
+        description: Ensure result set excludes specific IDs.
+        schema:
+          type: array
+          items:
+            type: integer
+          default: []
+      - name: has_published_posts
+        in: query
+        description: Limit result set to users who have published posts.
+        schema:
+          type: boolean
+      - name: include
+        in: query
+        description: Limit result set to specific IDs.
+        schema:
+          type: array
+          items:
+            type: integer
+          default: []
+      - name: offset
+        in: query
+        description: Offset the result set by a specific number of items.
+        schema:
+          type: integer
+      - name: order
+        in: query
+        description: Order sort attribute ascending or descending.
+        schema:
+          type: string
+          enum:
+          - asc
+          - desc
+          default: asc
+      - name: orderby
+        in: query
+        description: Sort collection by user attribute.
+        schema:
+          type: string
+          enum:
+          - id
+          - include
+          - name
+          - registered_date
+          - slug
+          - include_slugs
+          - email
+          - url
+          default: name
+      - name: page
+        in: query
+        description: Current page of the collection.
+        schema:
+          type: integer
+          default: 1
+          minimum: 1
+      - name: per_page
+        in: query
+        description: Maximum number of items to be returned in result set.
+        schema:
+          type: integer
+          default: 10
+          minimum: 1
+          maximum: 100
+      - name: roles
+        in: query
+        description: Limit result set to users matching at least one specific role provided. Accepts csv list or single role.
+        schema:
+          type: array
+          items:
+            type: string
+      - name: search
+        in: query
+        description: Limit results to those matching a string.
+        schema:
+          type: string
+      - name: search_columns
+        in: query
+        description: Array of column names to be searched.
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - email
+            - name
+            - id
+            - username
+            - slug
+          default: []
+      - name: slug
+        in: query
+        description: Limit result set to users with one or more specific slugs.
+        schema:
+          type: array
+          items:
+            type: string
+      - name: who
+        in: query
+        description: Limit result set to users who are considered authors.
+        schema:
+          type: string
+          enum:
+          - authors
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/json:
+              schema:
+                type: object
+          headers:
+            X-WP-Total:
+              description: Total number of items in the unpaginated collection.
+              schema:
+                type: integer
+            X-WP-TotalPages:
+              description: Total number of pages available at the current per_page.
+              schema:
+                type: integer
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /wp/v2/users/{id}:
+    get:
+      tags:
+      - users
+      operationId: getUser
+      summary: Retrieve a single author
+      description: 'Retrieves one author by numeric id. Anonymously this returns only the public view: id, name, url, description,
+        link, slug and avatar_urls.'
+      parameters:
+      - name: id
+        in: path
+        description: Unique identifier for the user.
+        required: true
+        schema:
+          type: integer
+      - name: context
+        in: query
+        description: Scope under which the request is made; determines fields present in response.
+        schema:
+          type: string
+          enum:
+          - view
+          - embed
+          - edit
+          default: view
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+components:
+  schemas:
+    WPError:
+      type: object
+      description: The WordPress REST error envelope. Not RFC 9457 problem+json; served as application/json.
+      properties:
+        code:
+          type: string
+          description: Machine-readable error code, e.g. rest_forbidden, rest_no_route, rest_post_invalid_id.
+        message:
+          type: string
+          description: Human-readable message.
+        data:
+          type: object
+          properties:
+            status:
+              type: integer
+              description: HTTP status code, repeated in the body.
+            params:
+              type: object
+              description: Present on rest_invalid_param; maps the offending parameter name to its validation message.
+      required:
+      - code
+      - message
+  responses:
+    BadRequest:
+      description: Invalid parameter (rest_invalid_param) or missing required parameter (rest_missing_callback_param).
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/WPError'
+    Unauthorized:
+      description: Anonymous request to a route this deployment restricts (rest_forbidden, rest_cannot_view). Observed on
+        /wp/v2/settings, /wp/v2/block-types, /wp/v2/menu-items, /wp/v2/template-parts and the akismet/v1, wp-super-cache/v1,
+        wp-site-health/v1 and wp-abilities/v1 namespaces.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/WPError'
+    NotFound:
+      description: No route matched (rest_no_route) or the requested resource id does not exist.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/WPError'

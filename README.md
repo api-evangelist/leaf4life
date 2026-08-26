@@ -64,5 +64,26 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-LEAF4Life is a company surfaced via the API Evangelist harvest backlog (source: secondary-market) and added to the network as a stub for full-pipeline profiling.
-- https://www.nasdaqprivatemarket.com/
+LEAF4Life Inc. is a privately held, clinical-stage biopharmaceutical company in Woburn, Massachusetts,
+founded in 2018 by Dr. Clet Niyikiza to develop therapies for hypoxia. Its lead asset, KizaVie™
+(LEAF-4L6715), is a proprietary liposomal formulation of transcrocetin, in three Phase 3 registrational
+studies in Europe (ARDS, glioblastoma, sarcoma), with Compassionate Use Authorization granted in France
+for ARDS.
+
+- https://leafforlife.com/
+
+**LEAF4Life runs no developer program.** It publishes no product API, developer portal, API reference,
+OpenAPI definition, SDK, CLI, webhooks, MCP server, A2A agent card, `llms.txt`, pricing or status page —
+each of those was probed on 2026-08-25 and returned HTTP 404. The only machine-readable surface reachable
+without credentials is the WordPress REST content API behind the corporate site
+(`https://leafforlife.com/wp-json`, 150 routes across 7 namespaces), which is what this repository
+catalogues.
+
+One thing to know before using it: **page bodies are empty over that API.** `content.rendered` and
+`excerpt.rendered` are the empty string on all 8 published pages, because the site theme assembles page
+bodies from page-builder postmeta rather than `post_content`. Site search returns zero for every term for
+the same reason. The API is a reliable index of what pages exist and when they changed; the text on them
+must be read from the HTML.
+
+Everything in `openapi/` is an API Evangelist derivation of the provider's own live route index, not a
+provider publication. See `apis.yml` for the full artifact list.

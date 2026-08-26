@@ -1,0 +1,75 @@
+generated: '2026-08-25'
+method: probed
+source: >-
+  Direct HTTPS probes of every /.well-known/ path in the enrichment contract against every host named
+  in apis.yml and in the OpenAPI servers[] blocks, on 2026-08-25.
+note: >-
+  Nothing is served. Every path below returned HTTP 404, and every 404 body is the site's themed
+  WordPress HTML 404 page (47,428 bytes, beginning `<!DOCTYPE html>`), not a document — any path that
+  is not under /wp-json/ falls through the WordPress rewrite. No `WellKnown` and no `SecurityTxt`
+  pointer is emitted in apis.yml, because a pointer would assert that LEAF4Life serves these surfaces
+  and it does not. This file is a recorded absence, which is valid data, not a presence.
+hosts:
+- host: leafforlife.com
+  note: >-
+    The only host LEAF4Life controls that appears anywhere in this repo. The other two hosts in the
+    OpenAPI/apis.yml graph — developer.wordpress.org and oembed.com — are upstream specification
+    references, not LEAF4Life property, and are deliberately not probed as if they were.
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+    file: null
+  - path: /.well-known/openid-configuration
+    status: 404
+    file: null
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+    file: null
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+    file: null
+  - path: /.well-known/api-catalog
+    status: 404
+    file: null
+  - path: /.well-known/ai-plugin.json
+    status: 404
+    file: null
+  - path: /.well-known/agent-card.json
+    status: 404
+    file: null
+  - path: /.well-known/agent.json
+    status: 404
+    file: null
+adjacent_probes:
+  note: >-
+    Recorded here because they were probed in the same sweep and their absence is part of the same
+    finding.
+  documents:
+  - path: /llms.txt
+    status: 404
+  - path: /openapi.json
+    status: 404
+  - path: /openapi.yaml
+    status: 404
+  - path: /swagger.json
+    status: 404
+  - path: /api-docs
+    status: 404
+  - path: /docs
+    status: 404
+  - path: /apis.json
+    status: 404
+  - path: /graphql
+    status: 404
+  - path: /mcp
+    status: 404
+  - path: /asyncapi.yaml
+    status: 404
+  - path: /sitemap.xml
+    status: 404
+  - path: /wp-sitemap.xml
+    status: 404
+    note: Advertised by robots.txt and not served — see lifecycle/leaf4life-lifecycle.yml#discovery_defects.
+  - path: /robots.txt
+    status: 200
+    note: Served. The only well-known-class document this host actually returns.

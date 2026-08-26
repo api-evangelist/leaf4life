@@ -1,0 +1,67 @@
+generated: '2026-08-25'
+method: derived
+status: candidate
+source: >-
+  Searched for a first-party MCP server (site, LinkedIn, npm, PyPI, GitHub) and probed
+  https://leafforlife.com/mcp and the WordPress ability registry on 2026-08-25. None exists. The tools
+  below are a candidate mapping derived from the OpenAPI documents in this repo, not something
+  LEAF4Life ships.
+deployment:
+  mode: none
+  endpoint: null
+  install: null
+  package: null
+  auth: none
+  verified: probed
+note: >-
+  LEAF4Life ships no MCP server, hosted or local. No `MCPServer` pointer is emitted in apis.yml,
+  because the pointer would assert an agent surface the company does not operate. Two things were
+  checked and both missed: https://leafforlife.com/mcp returns HTTP 404 (themed HTML body), and the
+  wp-abilities/v1 namespace — WordPress 7.0.3's own ability registry, which is the nearest thing on
+  this deployment to a native agent tool surface — is registered but returns 401 rest_forbidden to
+  anonymous callers, so its tool schemas cannot be read without site credentials. The candidate tools
+  below record what an MCP server over this API would expose if anyone built one; they are derived
+  from real operationIds in openapi/ and nothing here is invented.
+probes:
+- url: https://leafforlife.com/mcp
+  method: GET
+  status: 404
+- url: https://leafforlife.com/wp-json/wp-abilities/v1/abilities
+  method: GET
+  status: 401
+  code: rest_forbidden
+- url: https://leafforlife.com/wp-json/wp-abilities/v1/categories
+  method: GET
+  status: 401
+  code: rest_forbidden
+candidate_tools:
+- name: list_pages
+  rest: [listPages]
+  source: openapi/leaf4life-pages-api-openapi.yml
+  description: List the 8 published pages with id, slug, title, link and modified date.
+- name: get_page
+  rest: [getPage]
+  source: openapi/leaf4life-pages-api-openapi.yml
+  description: Retrieve one page by id. Returns identity only — page bodies are empty over this API.
+- name: list_media
+  rest: [listMedia]
+  source: openapi/leaf4life-media-api-openapi.yml
+  description: List the 59 image attachments with source_url and mime_type.
+- name: get_media_item
+  rest: [getMediaItem]
+  source: openapi/leaf4life-media-api-openapi.yml
+  description: Retrieve one attachment by id, with its generated renditions.
+- name: search_site
+  rest: [searchSite]
+  source: openapi/leaf4life-search-api-openapi.yml
+  description: >-
+    Search site content. Would return nothing useful — the underlying route returns zero for every
+    term because page bodies are not in post_content.
+- name: describe_deployment
+  rest: [listTypes, listTaxonomies, listStatuses]
+  source: openapi/leaf4life-discovery-api-openapi.yml
+  description: Enumerate registered post types, taxonomies and statuses.
+- name: get_oembed
+  rest: [getOEmbed]
+  source: openapi/leaf4life-oembed-api-openapi.yml
+  description: Get an oEmbed 1.0 response for a URL on leafforlife.com.

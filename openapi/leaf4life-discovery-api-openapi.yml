@@ -1,0 +1,314 @@
+openapi: 3.1.0
+info:
+  title: LEAF4Life API Discovery
+  version: wp/v2
+  summary: Anonymously readable WordPress schema-discovery routes behind leafforlife.com.
+  description: The read-only content surface LEAF4Life exposes at https://leafforlife.com/wp-json. LEAF4Life Inc. is a privately
+    held clinical-stage biopharmaceutical company in Woburn, Massachusetts developing KizaVie™ (LEAF-4L6715), a proprietary
+    liposomal formulation of transcrocetin for hypoxia-related disorders. It runs no developer program and markets no product
+    API. This document is an API Evangelist derivation of the WordPress REST route index the site publishes at /wp-json/,
+    restricted to operations verified to return data anonymously on 2026-08-25. This document covers the discovery routes
+    an agent uses to learn the shape of the deployment before reading content. The route index itself is served at the server
+    root (GET https://leafforlife.com/wp-json/) and returns name, description, url, namespaces, routes and the application-passwords
+    authentication block.
+  contact:
+    name: LEAF4Life Inc.
+    url: https://leafforlife.com/contact-us/
+  x-api-evangelist-provenance: Derived by the API Evangelist enrichment pipeline from the live WordPress REST route index
+    published at https://leafforlife.com/wp-json/ (150 routes across 7 namespaces) and verified against live anonymous responses
+    on 2026-08-25. Every parameter below appears verbatim in that route index's `args` for the endpoint it is attached to,
+    and every collection count quoted in a description was read from the `X-WP-Total` response header on that date. LEAF4Life
+    publishes no OpenAPI, no developer portal and no API reference for this surface; the humanURL in apis.yml points at the
+    upstream WordPress REST handbook that defines the wp/v2 contract. Routes that returned HTTP 401 anonymously (/wp/v2/settings,
+    /wp/v2/block-types, /wp/v2/menu-items, /wp/v2/template-parts, the whole akismet/v1, wp-super-cache/v1, wp-site-health/v1
+    and wp-abilities/v1 namespaces) and every write method are deliberately excluded. Nothing here was obtained with credentials.
+servers:
+- url: https://leafforlife.com/wp-json
+  description: Production WordPress REST content API
+tags:
+- name: discovery
+  description: Post types, taxonomies and statuses — the self-describing surface of the deployment.
+paths:
+  /wp/v2/types:
+    get:
+      tags:
+      - discovery
+      operationId: listTypes
+      summary: List registered post types
+      description: 'Lists the registered post types on this deployment: post, page, attachment, nav_menu_item, wp_block, wp_template,
+        wp_template_part, wp_global_styles, wp_navigation, wp_font_family and wp_font_face. Only page and attachment carry
+        published content.'
+      parameters:
+      - name: context
+        in: query
+        description: Scope under which the request is made; determines fields present in response.
+        schema:
+          type: string
+          enum:
+          - view
+          - embed
+          - edit
+          default: view
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/json:
+              schema:
+                type: object
+          headers:
+            X-WP-Total:
+              description: Total number of items in the unpaginated collection.
+              schema:
+                type: integer
+            X-WP-TotalPages:
+              description: Total number of pages available at the current per_page.
+              schema:
+                type: integer
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /wp/v2/types/{type}:
+    get:
+      tags:
+      - discovery
+      operationId: getType
+      summary: Retrieve a single post type
+      description: Retrieves one registered post type by slug, including its rest_base and supported features.
+      parameters:
+      - name: type
+        in: path
+        description: An alphanumeric identifier for the post type.
+        required: true
+        schema:
+          type: string
+      - name: context
+        in: query
+        description: Scope under which the request is made; determines fields present in response.
+        schema:
+          type: string
+          enum:
+          - view
+          - embed
+          - edit
+          default: view
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /wp/v2/taxonomies:
+    get:
+      tags:
+      - discovery
+      operationId: listTaxonomies
+      summary: List registered taxonomies
+      description: 'Lists the registered taxonomies: category, post_tag, nav_menu and wp_pattern_category.'
+      parameters:
+      - name: context
+        in: query
+        description: Scope under which the request is made; determines fields present in response.
+        schema:
+          type: string
+          enum:
+          - view
+          - embed
+          - edit
+          default: view
+      - name: type
+        in: query
+        description: Limit results to taxonomies associated with a specific post type.
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/json:
+              schema:
+                type: object
+          headers:
+            X-WP-Total:
+              description: Total number of items in the unpaginated collection.
+              schema:
+                type: integer
+            X-WP-TotalPages:
+              description: Total number of pages available at the current per_page.
+              schema:
+                type: integer
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /wp/v2/taxonomies/{taxonomy}:
+    get:
+      tags:
+      - discovery
+      operationId: getTaxonomy
+      summary: Retrieve a single taxonomy
+      description: Retrieves one registered taxonomy by slug.
+      parameters:
+      - name: taxonomy
+        in: path
+        description: An alphanumeric identifier for the taxonomy.
+        required: true
+        schema:
+          type: string
+      - name: context
+        in: query
+        description: Scope under which the request is made; determines fields present in response.
+        schema:
+          type: string
+          enum:
+          - view
+          - embed
+          - edit
+          default: view
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /wp/v2/statuses:
+    get:
+      tags:
+      - discovery
+      operationId: listStatuses
+      summary: List post statuses
+      description: Lists the post statuses visible to the caller. Anonymously this returns only `publish`.
+      parameters:
+      - name: context
+        in: query
+        description: Scope under which the request is made; determines fields present in response.
+        schema:
+          type: string
+          enum:
+          - view
+          - embed
+          - edit
+          default: view
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/json:
+              schema:
+                type: object
+          headers:
+            X-WP-Total:
+              description: Total number of items in the unpaginated collection.
+              schema:
+                type: integer
+            X-WP-TotalPages:
+              description: Total number of pages available at the current per_page.
+              schema:
+                type: integer
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /wp/v2/statuses/{status}:
+    get:
+      tags:
+      - discovery
+      operationId: getStatus
+      summary: Retrieve a single post status
+      description: Retrieves one post status by slug.
+      parameters:
+      - name: status
+        in: path
+        description: An alphanumeric identifier for the status.
+        required: true
+        schema:
+          type: string
+      - name: context
+        in: query
+        description: Scope under which the request is made; determines fields present in response.
+        schema:
+          type: string
+          enum:
+          - view
+          - embed
+          - edit
+          default: view
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+components:
+  schemas:
+    WPError:
+      type: object
+      description: The WordPress REST error envelope. Not RFC 9457 problem+json; served as application/json.
+      properties:
+        code:
+          type: string
+          description: Machine-readable error code, e.g. rest_forbidden, rest_no_route, rest_post_invalid_id.
+        message:
+          type: string
+          description: Human-readable message.
+        data:
+          type: object
+          properties:
+            status:
+              type: integer
+              description: HTTP status code, repeated in the body.
+            params:
+              type: object
+              description: Present on rest_invalid_param; maps the offending parameter name to its validation message.
+      required:
+      - code
+      - message
+  responses:
+    BadRequest:
+      description: Invalid parameter (rest_invalid_param) or missing required parameter (rest_missing_callback_param).
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/WPError'
+    Unauthorized:
+      description: Anonymous request to a route this deployment restricts (rest_forbidden, rest_cannot_view). Observed on
+        /wp/v2/settings, /wp/v2/block-types, /wp/v2/menu-items, /wp/v2/template-parts and the akismet/v1, wp-super-cache/v1,
+        wp-site-health/v1 and wp-abilities/v1 namespaces.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/WPError'
+    NotFound:
+      description: No route matched (rest_no_route) or the requested resource id does not exist.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/WPError'

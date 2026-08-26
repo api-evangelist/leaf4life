@@ -1,0 +1,42 @@
+generated: '2026-08-25'
+method: probed
+source: >-
+  Live response headers observed on https://leafforlife.com/wp-json collection and item responses on
+  2026-08-25, plus a full read of the public site for any published limits.
+limit_count: 0
+note: >-
+  LEAF4Life documents no rate limits, because it documents no API. No RateLimit-*, X-RateLimit-* or
+  Retry-After header was returned on any /wp-json response during this pass, and no 429 was observed.
+  This is an honest zero, not an unmeasured gap: the headers were read on every request made.
+  Consumers have no runtime signal at all and should self-throttle. The only published crawl guidance
+  is robots.txt, which sets no Crawl-delay.
+limits: []
+response_headers:
+  observed: []
+  absent:
+  - RateLimit-Limit
+  - RateLimit-Remaining
+  - RateLimit-Reset
+  - X-RateLimit-Limit
+  - X-RateLimit-Remaining
+  - X-RateLimit-Reset
+  - Retry-After
+exhaustion_status: null
+edge_controls:
+  detail: >-
+    Requests traverse a NitroPack edge cache and a Cloudflare-managed edge in front of an
+    openresty/1.25.3.1 origin. Either could apply an unsignalled abuse control; none was triggered
+    during this pass, and /wp-json responses were never challenged. HTML pages are served from cache
+    (X-Nitro-Cache: HIT) while API responses are explicitly uncached (Cache-Control: no-cache).
+  robots_txt:
+    url: https://leafforlife.com/robots.txt
+    status: 200
+    crawl_delay: null
+    disallow: ['/wp-admin/', '/wp-content/uploads/wpforms/']
+x-evidence:
+  probed: '2026-08-25'
+  sample_request: GET https://leafforlife.com/wp-json/wp/v2/pages?per_page=1
+  sample_response_headers: >-
+    HTTP/1.1 200 OK; Server: openresty/1.25.3.1; Cache-Control: no-cache;
+    Access-Control-Expose-Headers: X-WP-Total, X-WP-TotalPages, Link; X-WP-Total: 8;
+    X-WP-TotalPages: 8; X-Robots-Tag: noindex — no rate-limit header of any family.
