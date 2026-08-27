@@ -53,8 +53,8 @@ apis:
   description: >-
     The page collection behind leafforlife.com — 8 published pages covering the mission, the science,
     leadership, the advisory board and contact. Anonymously readable. Verified 2026-08-25: content.rendered
-    is empty on every page because the theme assembles bodies with a page builder, so the route yields page
-    identity, links and dates but no page text.
+    is empty on every page because the theme assembles bodies with a page builder, so the route yields
+    page identity, links and dates but no page text.
   humanURL: https://developer.wordpress.org/rest-api/
   baseURL: https://leafforlife.com/wp-json
   tags:
@@ -78,8 +78,8 @@ apis:
   name: LEAF4Life Media API
   description: >-
     The WordPress media library behind leafforlife.com — 59 image attachments (43 PNG, 16 JPEG) spanning
-    September 2020 to July 2026, including the brand marks, leadership headshots and the figure artwork used
-    on the science pages. Anonymously readable. No PDFs, documents or datasets are published.
+    September 2020 to July 2026, including the brand marks, leadership headshots and the figure artwork
+    used on the science pages. Anonymously readable. No PDFs, documents or datasets are published.
   humanURL: https://developer.wordpress.org/rest-api/
   baseURL: https://leafforlife.com/wp-json
   tags:
@@ -101,8 +101,8 @@ apis:
   name: LEAF4Life Taxonomy API
   description: >-
     Category and tag terms. Registered and anonymously reachable but effectively unused — one category
-    (the WordPress default `uncategorized`) and 21 tags, every one with an item count of zero, and the tag
-    slugs are theme-demo residue rather than company vocabulary.
+    (the WordPress default `uncategorized`) and 21 tags, every one with an item count of zero, and the
+    tag slugs are theme-demo residue rather than company vocabulary.
   humanURL: https://developer.wordpress.org/rest-api/
   baseURL: https://leafforlife.com/wp-json
   tags:
@@ -172,8 +172,7 @@ apis:
   name: LEAF4Life Authors API
   description: >-
     Published authors. One entry — a shared editorial account, `leaf4l` — exposing only id, name, slug,
-    link, description and avatar URLs anonymously. No personal names, e-mail addresses or roles are
-    disclosed.
+    link, description and avatar URLs anonymously. No personal names, e-mail addresses or roles are disclosed.
   humanURL: https://developer.wordpress.org/rest-api/
   baseURL: https://leafforlife.com/wp-json
   tags:
@@ -219,8 +218,8 @@ apis:
 - aid: leaf4life:leaf4life-oembed-api
   name: LEAF4Life oEmbed API
   description: >-
-    oEmbed 1.0 provider endpoint for URLs on leafforlife.com. Verified anonymously against the site root —
-    provider_name "LEAF4life". This is the only formally standardised interface the deployment implements.
+    oEmbed 1.0 provider endpoint for URLs on leafforlife.com. Verified anonymously against the site root
+    — provider_name "LEAF4life". This is the only formally standardised interface the deployment implements.
   humanURL: https://oembed.com/
   baseURL: https://leafforlife.com/wp-json
   tags:
@@ -240,6 +239,16 @@ apis:
     url: conventions/leaf4life-conventions.yml
   - type: Conformance
     url: conformance/leaf4life-conformance.yml
+- aid: leaf4life:leaf4life-comments-api
+  name: LEAF4Life Comments API
+  description: Comment collection — registered, zero items.
+  humanURL: https://developer.wordpress.org/rest-api/
+  baseURL: https://leafforlife.com/wp-json
+  tags:
+  - comments
+  properties:
+  - type: OpenAPI
+    url: openapi/leaf4life-comments-api-openapi.yml
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
