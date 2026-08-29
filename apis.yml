@@ -16,6 +16,18 @@ description: >-
   definition. The only machine-readable surface reachable without credentials is the WordPress REST
   content API behind leafforlife.com, catalogued here, and even that returns page identity and media only —
   every page body is empty over the API because the site is assembled by a page builder.
+deliveryModel:
+  model: saas
+  open_source: false
+  commercial: true
+  callable_host: true
+  label: Hosted service · you call their endpoint
+  confidence: high
+  source:
+  - openapi
+  - pricing
+  generated: '2026-08-28'
+  method: derived
 image: https://leafforlife.com/wp-content/uploads/2025/11/LEAF4Life_logo_cropped_final.png
 url: https://raw.githubusercontent.com/api-evangelist/leaf4life/refs/heads/main/apis.yml
 x-type: company
