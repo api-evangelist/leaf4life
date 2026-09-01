@@ -39,14 +39,14 @@ created: '2026-08-25'
 modified: '2026-08-25'
 tags:
 - Company
-- biotechnology
-- pharmaceuticals
-- clinical-trials
-- oncology
-- critical-care
-- drug-development
-- life-sciences
-- rare-disease
+- Biotechnology
+- Pharmaceuticals
+- Clinical Trials
+- Oncology
+- Critical Care
+- Drug Development
+- Life Sciences
+- Rare Disease
 - content-api
 tags_raw:
 - Company
@@ -71,7 +71,7 @@ apis:
   baseURL: https://leafforlife.com/wp-json
   tags:
   - Pages
-  - content
+  - Content
   tags_raw:
   - pages
   - content
@@ -236,7 +236,7 @@ apis:
   baseURL: https://leafforlife.com/wp-json
   tags:
   - oEmbed
-  - embeds
+  - Embeds
   tags_raw:
   - oembed
   - embeds
