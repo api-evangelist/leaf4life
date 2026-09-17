@@ -241,30 +241,6 @@ apis:
     url: conventions/leaf4life-conventions.yml
   - type: DataModel
     url: data-model/leaf4life-data-model.yml
-- aid: leaf4life:leaf4life-oembed-api
-  name: LEAF4Life oEmbed API
-  description: >-
-    oEmbed 1.0 provider endpoint for URLs on leafforlife.com. Verified anonymously against the site root
-    — provider_name "LEAF4life". This is the only formally standardised interface the deployment implements.
-  humanURL: https://oembed.com/
-  baseURL: https://leafforlife.com/wp-json
-  tags:
-  - oEmbed
-  - Embeds
-  tags_raw:
-  - oembed
-  - embeds
-  properties:
-  - type: OpenAPI
-    url: openapi/leaf4life-oembed-api-openapi.yml
-  - type: Authentication
-    url: authentication/leaf4life-authentication.yml
-  - type: ErrorCatalog
-    url: errors/leaf4life-problem-types.yml
-  - type: Conventions
-    url: conventions/leaf4life-conventions.yml
-  - type: Conformance
-    url: conformance/leaf4life-conformance.yml
 - aid: leaf4life:leaf4life-comments-api
   name: LEAF4Life Comments API
   description: Comment collection — registered, zero items.
@@ -277,6 +253,24 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/leaf4life-comments-api-openapi.yml
+- aid: leaf4life:leaf4life-o-embed-api
+  name: LEAF4Life o Embed API
+  description: oEmbed 1.0 provider endpoint for URLs on this site.
+  humanURL: https://developer.wordpress.org/rest-api/
+  baseURL: https://leafforlife.com/wp-json
+  tags:
+  - o Embed
+  properties:
+  - type: OpenAPI
+    url: openapi/leaf4life-o-embed-api-openapi.yml
+  - type: Authentication
+    url: authentication/leaf4life-authentication.yml
+  - type: ErrorCatalog
+    url: errors/leaf4life-problem-types.yml
+  - type: Conventions
+    url: conventions/leaf4life-conventions.yml
+  - type: Conformance
+    url: conformance/leaf4life-conformance.yml
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
