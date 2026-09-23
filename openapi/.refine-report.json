@@ -1,0 +1,34 @@
+{
+  "provider": "leaf4life",
+  "sources": [
+    "leaf4life-comments-api-openapi.yml",
+    "leaf4life-discovery-api-openapi.yml",
+    "leaf4life-media-api-openapi.yml",
+    "leaf4life-o-embed-api-openapi.yml",
+    "leaf4life-pages-api-openapi.yml",
+    "leaf4life-posts-api-openapi.yml",
+    "leaf4life-search-api-openapi.yml",
+    "leaf4life-taxonomy-api-openapi.yml",
+    "leaf4life-users-api-openapi.yml"
+  ],
+  "outputs": [
+    "leaf4life-comments-api-openapi.yml",
+    "leaf4life-discovery-api-openapi.yml",
+    "leaf4life-media-api-openapi.yml",
+    "leaf4life-o-embed-api-openapi.yml",
+    "leaf4life-pages-api-openapi.yml",
+    "leaf4life-posts-api-openapi.yml",
+    "leaf4life-search-api-openapi.yml",
+    "leaf4life-taxonomy-api-openapi.yml",
+    "leaf4life-users-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [
+    "no openapi/_original/ archive: this run re-split PREVIOUSLY REFINED output, so any base URL it carries is inherited from an earlier pass rather than read from a document the provider published"
+  ],
+  "notes": [
+    "apis.yml register: already-registered"
+  ],
+  "skipped": []
+}

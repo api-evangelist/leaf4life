@@ -3,7 +3,7 @@ info:
   title: LEAF4Life Posts Comments API
   version: wp/v2
   summary: Registered but empty WordPress post and comment collections behind leafforlife.com.
-  description: 'The read-only content surface LEAF4Life exposes at https://leafforlife.com/wp-json. LEAF4Life Inc. is a privately held clinical-stage biopharmaceutical company in Woburn, Massachusetts developing KizaVie™ (LEAF-4L6715), a proprietary liposomal formulation of transcrocetin for hypoxia-related disorders. It runs no developer program and markets no product API. This document is an API Evangelist derivation of the WordPress REST route index the site publishes at /wp-json/, restricted to operations verified to return data anonymously on 2026-08-25. This document records the post and comment collections, both of which are registered, anonymously reachable and empty. They are catalogued because an absence measured against a live route is data: LEAF4Life ships no machine-readable news or press feed.'
+  description: The read-only content surface LEAF4Life exposes at https://leafforlife.com/wp-json.
   contact:
     name: LEAF4Life Inc.
     url: https://leafforlife.com/contact-us/
@@ -12,13 +12,13 @@ servers:
 - url: https://leafforlife.com/wp-json
   description: Production WordPress REST content API
 tags:
-- name: comments
+- name: Comments
   description: Comment collection — registered, zero items.
 paths:
   /wp/v2/comments:
     get:
       tags:
-      - comments
+      - Comments
       operationId: listComments
       summary: List approved comments
       description: 'Lists approved comments. Registered and anonymously reachable, but empty — X-WP-Total: 0 on 2026-08-25.'
@@ -193,25 +193,6 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 components:
-  responses:
-    Unauthorized:
-      description: Anonymous request to a route this deployment restricts (rest_forbidden, rest_cannot_view). Observed on /wp/v2/settings, /wp/v2/block-types, /wp/v2/menu-items, /wp/v2/template-parts and the akismet/v1, wp-super-cache/v1, wp-site-health/v1 and wp-abilities/v1 namespaces.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/WPError'
-    NotFound:
-      description: No route matched (rest_no_route) or the requested resource id does not exist.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/WPError'
-    BadRequest:
-      description: Invalid parameter (rest_invalid_param) or missing required parameter (rest_missing_callback_param).
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/WPError'
   schemas:
     WPError:
       type: object
@@ -235,3 +216,22 @@ components:
       required:
       - code
       - message
+  responses:
+    Unauthorized:
+      description: Anonymous request to a route this deployment restricts (rest_forbidden, rest_cannot_view). Observed on /wp/v2/settings, /wp/v2/block-types, /wp/v2/menu-items, /wp/v2/template-parts and the akismet/v1, wp-super-cache/v1, wp-site-health/v1 and wp-abilities/v1 namespaces.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/WPError'
+    NotFound:
+      description: No route matched (rest_no_route) or the requested resource id does not exist.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/WPError'
+    BadRequest:
+      description: Invalid parameter (rest_invalid_param) or missing required parameter (rest_missing_callback_param).
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/WPError'
